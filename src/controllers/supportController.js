@@ -12,7 +12,7 @@ exports.postSupport = async(req, res) => {
     try{
         // story_idx 안줬을 때
         if(story_idx === undefined)
-            return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NO_PARAMETER));
+            return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.PARAMETER_ERROR));
 
         // 해당하는 스토리가 존재하지 않을 때
         const storyInfo = await story.getStoryInfo(story_idx);
@@ -39,7 +39,7 @@ exports.getSupportTop = async(req, res) => {
     try{
         // story_idx 안줬을 때
         if(story_idx === undefined)
-            return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.NO_PARAMETER));
+            return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.PARAMETER_ERROR));
 
         // 해당하는 스토리가 존재하지 않을 때
         const storyInfo = await story.getStoryInfo(story_idx);
@@ -55,6 +55,47 @@ exports.getSupportTop = async(req, res) => {
             .send(util.success(
                     statusCode.OK,
                     responseMessage.GET_SUPPORT_TOP_SUCCESS,
+                {supportCount: supportCount, support: result }));
+    } catch(err){
+        return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, err.message));
+        throw err;
+    }
+}
+
+exports.getSupport = async(req, res) => {
+    let {story_idx, filter} = req.query;
+    let result;
+
+    try{
+        // story_idx 안줬을 때
+        if(story_idx === undefined)
+            return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.PARAMETER_ERROR));
+        if(filter === undefined)
+            filter = 0;
+
+        // 해당하는 스토리가 존재하지 않을 때
+        const storyInfo = await story.getStoryInfo(story_idx);
+        if (!storyInfo[0])
+            return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_CONTENT));
+
+        const supportCount = await support.getSupportCount(req);
+
+        // 최신순
+        if(filter == 0)
+            result = await support.getSupportByRecent(req);
+        // 후원 많은 순
+        else if(filter == 1)
+            result  = await support.getSupportByAmount(req);
+        else
+            return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.PARAMETER_ERROR));
+
+        if(result === undefined)
+            return res.status(statusCode.DB_ERROR).send(util.fail(statusCode.DB_ERROR, responseMessage.DB_ERROR));
+
+        return res.status(statusCode.OK)
+            .send(util.success(
+                statusCode.OK,
+                responseMessage.GET_SUPPORT_SUCCESS,
                 {supportCount: supportCount, support: result }));
     } catch(err){
         return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, err.message));
