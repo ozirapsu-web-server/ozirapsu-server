@@ -13,3 +13,27 @@ exports.postSupport = async(req, support_createdat) => {
         throw err;
     }
 }
+
+exports.getSupportTop = async(req) => {
+    const query = `SELECT support_nickname, support_amount, support_comment FROM ${table} WHERE story_idx = ${req.query.story_idx} LIMIT 3;`;
+
+    try {
+        const result = await pool.queryParam(query);
+        return result;
+    } catch (err) {
+        console.log('getSupportTop error: ', err.message);
+        throw err;
+    }
+}
+
+exports.getSupportCount = async(req) => {
+    const query = `SELECT count(*) AS count FROM ${table} WHERE story_idx = ${req.query.story_idx};`;
+
+    try {
+        const result = await pool.queryParam(query);
+        return result[0].count;
+    } catch (err) {
+        console.log('getSupportCount error: ', err.message);
+        throw err;
+    }
+}
