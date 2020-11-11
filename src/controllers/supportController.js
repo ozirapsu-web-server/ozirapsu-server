@@ -24,7 +24,7 @@ exports.postSupport = async(req, res) => {
 
         const support_idx = await support.postSupport(req, support_createdat);
         if(support_idx === undefined)
-            return res.status(statusCode.DB_ERROR).send(util.fail(statusCode.DB_ERROR, responseMessage.DB_ERROR));
+            return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, responseMessage.DB_ERROR));
 
         return res.status(statusCode.CREATED).send(util.successWithoutData(statusCode.CREATED, responseMessage.POST_SUPPORT_SUCCESS));
     } catch(err){
@@ -49,7 +49,7 @@ exports.getSupportTop = async(req, res) => {
         const supportCount = await support.getSupportCount(req);
         const result = await support.getSupportTop(req);
         if(result === undefined)
-            return res.status(statusCode.DB_ERROR).send(util.fail(statusCode.DB_ERROR, responseMessage.DB_ERROR));
+            return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, responseMessage.DB_ERROR));
 
         return res.status(statusCode.OK)
             .send(util.success(
@@ -90,7 +90,7 @@ exports.getSupport = async(req, res) => {
             return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.PARAMETER_ERROR));
 
         if(result === undefined)
-            return res.status(statusCode.DB_ERROR).send(util.fail(statusCode.DB_ERROR, responseMessage.DB_ERROR));
+            return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, responseMessage.DB_ERROR));
 
         return res.status(statusCode.OK)
             .send(util.success(
