@@ -1,6 +1,7 @@
 const pool = require('../modules/pool');
 const story_tb = 'STORY_TB';
 const img_tb = 'STORY_IMAGE_TB';
+const tag_tb = 'STORY_TAG_TB';
 
 /**
  * 사연 정보 조회
@@ -32,4 +33,53 @@ exports.getStoryImages = async (story_idx) => {
     console.log('getStoryImages error: ', err.message);
     throw err;
   }
+};
+
+/**
+ * 사연 등록
+ */
+exports.postStory = async (
+  title,
+  contents,
+  targetAmount,
+  createdAt,
+  hostIdx,
+  tagList,
+  imgFiles
+) => {
+  // summary 넣는지 확인하기
+  const storyColumns =
+    'story_title, story_summary, story_target_amount, story_content, story_createat, host_idx';
+  const insertStoryQuery = `INSERT INTO ${story_tb}(${storyColumns}) 
+                  VALUES("${title}", "===summary===", ${targetAmount}, "${contents}", "${createdAt}", ${hostIdx});`;
+  const insertTagQuery = `INSERT INTO ${tag_tb}(tag_content, story_idx) VALUES (?, ?)`;
+
+  const insertImgQuery = `INSERT INTO ${img_tb}(image_path, image_original_name, story_idx) VALUES (?, ?, ?)`;
+
+  return await pool
+    .Transaction(async (conn) => {
+      // 1. STORY_TB에 사연 정보 삽입
+      let insertStoryResult = await conn.query(insertStoryQuery);
+
+      // 2. STORY_TAG_TB에 태그 삽입
+      tagList.forEach(async (tag) => {
+        await conn.query(insertTagQuery, [tag, insertStoryResult.insertId]);
+      });
+
+      // 3. STORY_IMAGE_TB에 이미지 삽입
+      imgFiles.forEach(async (img) => {
+        const type = img.mimetype.split('/')[1];
+        if (type === 'jpeg' || type === 'jpg' || type === 'png') {
+          await conn.query(insertImgQuery, [
+            img.location,
+            img.originalname,
+            insertStoryResult.insertId,
+          ]);
+        }
+      });
+    })
+    .catch((err) => {
+      console.log('postStory error: ', err.message);
+      throw err;
+    });
 };
