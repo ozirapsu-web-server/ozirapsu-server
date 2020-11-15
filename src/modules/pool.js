@@ -44,15 +44,14 @@ module.exports = {
                 const connection = await pool.getConnection();
                 try {
                     await connection.beginTransaction();
-                    args.forEach(async (it) => await it(connection));
+                    const result = args.forEach(async (it) => await it(connection));
                     await connection.commit();
-                    pool.releaseConnection(connection);
                     resolve(result);
                 } catch (err) {
                     await connection.rollback()
-                    pool.releaseConnection(connection);
                     reject(err);
                 }
+                pool.releaseConnection(connection);
             } catch (err) {
                 reject(err);
             }
