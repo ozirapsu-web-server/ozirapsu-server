@@ -11,4 +11,7 @@ router.get('/top', supportController.getSupportTop);
 // 응원 조회
 router.get('/', supportController.getSupport);
 
+// 대댓글 등록
+router.post('/:support_idx/comment', supportController.postSupportComment);
+
 module.exports = router;

@@ -73,3 +73,17 @@ exports.getSupportByAmount = async(req) => {
         throw err;
     }
 }
+
+exports.postSupportComment = async(req, comment_createdat, host_idx) => {
+    const query = `INSERT INTO SUPPORT_COMMENT_TB
+                    (comment_content, comment_createdat , support_idx, host_idx) 
+                    VALUES("${req.body.comment_content}", "${comment_createdat}", ${req.params.support_idx}, ${host_idx});`;
+
+    try {
+        const result = await pool.queryParam(query);
+        return result.insertId;
+    } catch (err) {
+        console.log('postSupportComment error: ', err.message);
+        throw err;
+    }
+}

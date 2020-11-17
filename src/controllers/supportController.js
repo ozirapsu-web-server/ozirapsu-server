@@ -102,3 +102,30 @@ exports.getSupport = async(req, res) => {
         throw err;
     }
 }
+
+
+exports.postSupportComment = async(req, res) => {
+    const support_idx = req.params.support_idx;
+    // 로그인 구현 전 임시 host_idx 사용 -> 수정 해야 됨
+    const host_idx = 1;
+    try{
+        // support_idx 안줬을 때
+        if(support_idx === undefined || support_idx === null || support_idx == 0)
+            return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.PARAMETER_ERROR));
+
+        // 대댓글 날짜 생성
+        const comment_createdat = moment().format('YYYY-MM-DD HH:mm:ss');
+        const result = await support.postSupportComment(req, comment_createdat, host_idx);
+
+        if(result === undefined)
+            return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, responseMessage.DB_ERROR));
+
+        return res.status(statusCode.CREATED)
+            .send(util.successWithoutData(
+                statusCode.CREATED,
+                responseMessage.POST_SUPPORT_COMMENT_SUCCESS));
+    } catch(err){
+        return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, err.message));
+        throw err;
+    }
+}
