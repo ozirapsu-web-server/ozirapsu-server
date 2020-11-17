@@ -13,12 +13,19 @@ exports.getStoryInfo = async (req, res) => {
 
   try {
     const storyInfo = await storyModel.getStoryInfo(idx);
+    const tagInfo = await storyModel.getTags(idx);
+    let tags = [];
+    tagInfo.map((tag, idx) => {
+      tags[idx] = tag.tag_content;
+    });
 
     if (!storyInfo[0]) {
       return res
         .status(statusCode.NO_CONTENT)
         .send(util.success(statusCode.NO_CONTENT, responseMessage.NO_CONTENT));
     }
+
+    storyInfo[0].tags = tags;
 
     return res
       .status(statusCode.OK)
