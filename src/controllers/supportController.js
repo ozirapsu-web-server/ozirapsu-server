@@ -64,7 +64,7 @@ exports.getSupportTop = async(req, res) => {
 
 exports.getSupport = async(req, res) => {
     let {story_idx, filter} = req.query;
-    let result;
+    let comments;
 
     try{
         // story_idx 안줬을 때
@@ -82,21 +82,22 @@ exports.getSupport = async(req, res) => {
 
         // 최신순
         if(filter == 0)
-            result = await support.getSupportByRecent(req);
+            comments = await support.getSupportByRecent(req);
         // 후원 많은 순
         else if(filter == 1)
-            result  = await support.getSupportByAmount(req);
+            comments  = await support.getSupportByAmount(req);
         else
             return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.PARAMETER_ERROR));
 
-        if(result === undefined)
+        const supportComment = await support.getSupportComment(req);
+        if(comments === undefined || supportComment === undefined)
             return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, responseMessage.DB_ERROR));
 
         return res.status(statusCode.OK)
             .send(util.success(
                 statusCode.OK,
                 responseMessage.GET_SUPPORT_SUCCESS,
-                {supportCount: supportCount, support: result }));
+                {supportCount: supportCount, support: comments, supportComment: supportComment }));
     } catch(err){
         return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, err.message));
         throw err;
