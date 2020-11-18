@@ -18,6 +18,7 @@ exports.postSupport = async(req, support_createdat) => {
 exports.getSupportTop = async(req) => {
     const query = `SELECT support_nickname, support_amount, support_comment 
                     FROM ${table} WHERE story_idx = ${req.query.story_idx} 
+                    ORDER BY support_createdat DESC 
                     LIMIT 3;`;
 
     try {
