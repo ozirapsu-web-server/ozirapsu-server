@@ -45,7 +45,7 @@ exports.getSupportCount = async(req) => {
 }
 
 exports.getSupportByRecent = async(req) => {
-    const query = `SELECT support_nickname, support_amount, support_comment 
+    const query = `SELECT support_nickname, support_amount, support_comment, date_format(support_createdat, '%Y-%m-%d') AS support_date 
                     FROM ${table} 
                     WHERE story_idx = ${req.query.story_idx} 
                     ORDER BY support_createdat DESC;`;
@@ -61,7 +61,7 @@ exports.getSupportByRecent = async(req) => {
 
 
 exports.getSupportByAmount = async(req) => {
-    const query = `SELECT support_nickname, support_amount, support_comment 
+    const query = `SELECT support_nickname, support_amount, support_comment, date_format(support_createdat, '%Y-%m-%d') AS support_date 
                     FROM ${table} 
                     WHERE story_idx = ${req.query.story_idx} 
                     ORDER BY support_amount DESC;`;
@@ -85,6 +85,22 @@ exports.postSupportComment = async(req, comment_createdat, host_idx) => {
         return result.insertId;
     } catch (err) {
         console.log('postSupportComment error: ', err.message);
+        throw err;
+    }
+}
+
+exports.getSupportComment = async(req) => {
+    const query = `SELECT comment_content, date_format(support_createdat, '%Y-%m-%d') AS comment_date, support_idx 
+                    FROM SUPPORT_COMMENT_TB 
+                    JOIN ${table} 
+                    USING(support_idx) 
+                    WHERE story_idx = ${req.query.story_idx} ;`;
+
+    try {
+        const result = await pool.queryParam(query);
+        return result;
+    } catch (err) {
+        console.log('getSupportComment error: ', err.message);
         throw err;
     }
 }
