@@ -24,11 +24,22 @@ exports.saveUserInfo = async (
 
 // 이메일 중복 확인
 exports.checkEmail = async (email) => {
-  const query = `SELECT host_idx FROM ${table} WHERE host_email='${email}'`;
+  const query = `SELECT host_idx, host_password, host_salt FROM ${table} WHERE host_email='${email}'`;
   try {
     return await pool.queryParam(query);
   } catch (err) {
     console.log('checkEmail error: ', err.message);
+    throw err;
+  }
+};
+
+// 리프레시 토큰 저장
+exports.putRefreshToken = async (idx, refreshToken) => {
+  const query = `UPDATE ${table} SET host_refresh_token = '${refreshToken}' where host_idx=${idx};`;
+  try {
+    return await pool.queryParam(query);
+  } catch (err) {
+    console.log('putRefreshToken error: ', err.message);
     throw err;
   }
 };

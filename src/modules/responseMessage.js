@@ -11,8 +11,11 @@ module.exports = {
   POST_SUPPORT_COMMENT_SUCCESS: '응원 대댓글 등록 성공',
 
   // 호스트
-  ALREADY_EMAIL: '이미 존재하는 이메일 입니다.',
+  ALREADY_EMAIL: '이미 존재하는 이메일입니다.',
+  NO_USER: '존재하지 않는 유저 이메일입니다.',
   POST_SIGNUP_SUCCESS: '회원 가입 성공',
+  POST_SIGNIN_SUCCESS: '로그인 성공',
+  MISS_MATCH_PW: '비밀번호가 일치하지 않습니다',
 
   // 토큰
   EMPTY_TOKEN: '토큰 값이 없습니다.',
