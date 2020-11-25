@@ -10,6 +10,17 @@ module.exports = {
   GET_SUPPORT_SUCCESS: '사연 응원 조회 성공',
   POST_SUPPORT_COMMENT_SUCCESS: '응원 대댓글 등록 성공',
 
+  // 호스트
+  ALREADY_EMAIL: '이미 존재하는 이메일 입니다.',
+  POST_SIGNUP_SUCCESS: '회원 가입 성공',
+
+  // 토큰
+  EMPTY_TOKEN: '토큰 값이 없습니다.',
+  EXPIRED_TOKEN: '토큰 값이 만료되었습니다.',
+  INVALID_TOKEN: '유효하지 않은 토큰값입니다.',
+  AUTH_SUCCESS: '인증에 성공했습니다.',
+  ISSUE_SUCCESS: '새로운 토큰이 생성되었습니다.',
+
   NO_CONTENT: '데이터가 존재하지 않습니다.',
   PARAMETER_ERROR: '잘못된 파라미터 값',
   DB_ERROR: 'DB 에러',
