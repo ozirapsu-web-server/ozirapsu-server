@@ -32,3 +32,14 @@ exports.checkEmail = async (email) => {
     throw err;
   }
 };
+
+// 리프레시 토큰 저장
+exports.putRefreshToken = async (idx, refreshToken) => {
+  const query = `UPDATE ${table} SET host_refresh_token = '${refreshToken}' where host_idx=${idx};`;
+  try {
+    return await pool.queryParam(query);
+  } catch (err) {
+    console.log('putRefreshToken error: ', err.message);
+    throw err;
+  }
+};

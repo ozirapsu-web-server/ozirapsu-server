@@ -76,6 +76,7 @@ exports.singIn = async (req, res) => {
 
     if (result[0].host_password === hashed) {
       const { accessToken, refreshToken } = await jwt.sign(result[0]);
+      await hostModel.putRefreshToken(result[0].host_idx, refreshToken);
       return res
         .status(statusCode.OK)
         .set({ token: accessToken, refreshToken: refreshToken })
