@@ -36,6 +36,20 @@ exports.getTags = async (story_idx) => {
 };
 
 /**
+ * story_idx가 유효한 idx인지 확인
+ */
+exports.checkStoryIdx = async (story_idx) => {
+  const query = `SELECT * FROM ${story_tb} where story_idx=${story_idx};`;
+
+  try {
+    return await pool.queryParam(query);
+  } catch (err) {
+    console.log('checkStoryIdx error: ', err.message);
+    throw err;
+  }
+};
+
+/**
  * 사연 이미지 조회
  */
 exports.getStoryImages = async (story_idx) => {

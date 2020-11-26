@@ -2,6 +2,7 @@ module.exports = {
   // 사연
   GET_STORY_SUCCESS: '사연 조회 성공',
   GET_STORY_IMG_SUCCESS: '사연 이미지 조회 성공',
+  GET_STORY_IMG_FAIL: '존재하지 않는 STORY_IDX입니다.',
   POST_STORY_SUCCESS: '사연 등록 성공',
 
   // 응원
