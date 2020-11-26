@@ -136,3 +136,41 @@ exports.postStory = async (req, res) => {
     throw err;
   }
 };
+
+/**
+ * 최근 사연 조회
+ */
+exports.getRecentStory = async (req, res) => {
+  try {
+    const storyResult = await storyModel.getRecentStory();
+
+    for (const story of storyResult) {
+      // 사연 대표 이미지 조회
+      let img = await storyModel.getStoryImages(story.idx);
+      story.image = img[0].image_path;
+
+      // 사연 태그 조회
+      const tagInfo = await storyModel.getTags(story.idx);
+      let tags = [];
+      tagInfo.map((tag, idx) => {
+        tags[idx] = tag.tag_content;
+      });
+      story.tags = tags;
+    }
+
+    return res
+      .status(statusCode.OK)
+      .send(
+        util.success(
+          statusCode.OK,
+          responseMessage.GET_RECENT_STORY_SUCCESS,
+          storyResult
+        )
+      );
+  } catch (err) {
+    console.log(err.message);
+    return res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, err.message));
+  }
+};

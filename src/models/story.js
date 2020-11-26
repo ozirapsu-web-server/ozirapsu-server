@@ -97,3 +97,17 @@ exports.postStory = async (
       throw err;
     });
 };
+
+/**
+ * 최근 사연 조회
+ */
+exports.getRecentStory = async () => {
+  const query = `SELECT story_idx AS idx, story_title AS title,ROUND(story_current_amount*100/story_target_amount, 0) AS amount_rate FROM ${story_tb} order by story_createdat LIMIT 4;`;
+
+  try {
+    return await pool.queryParam(query);
+  } catch (err) {
+    console.log('getRecentStory error: ', err.message);
+    throw err;
+  }
+};
