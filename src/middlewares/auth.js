@@ -6,16 +6,16 @@ const TOKEN_EXPIRED = -3;
 const TOKEN_INVALID = -2;
 
 exports.checkToken = async (req, res, next) => {
-  let token = req.headers.jwt;
+  let accessToken = req.headers.accessToken;
 
   // 토큰이 없는 경우
-  if (!token) {
+  if (!accessToken) {
     return res
       .status(statusCode.BAD_REQUEST)
       .send(util.fail(statusCode.BAD_REQUEST, responseMessage.EMPTY_TOKEN));
   }
 
-  const user = await jwt.verify(token);
+  const user = await jwt.verify(accessToken);
   // 토큰 만료
   if (user === TOKEN_EXPIRED) {
     return res
