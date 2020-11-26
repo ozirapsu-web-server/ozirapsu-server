@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { secretKey, options, refreshOptions } = require('../config/secretKey');
+const hostModel = require('../models/host');
 const TOKEN_EXPIRED = -3;
 const TOKEN_INVALID = -2;
 
@@ -36,10 +37,10 @@ exports.verify = async (token) => {
 exports.refresh = async (refreshToken) => {
   try {
     const result = await jwt.verify(refreshToken, secretKey);
-    if (result.id === undefined) {
+    if (result.idx === undefined) {
       return TOKEN_INVALID;
     }
-    const user = await userService.getUserId(result.id);
+    const user = await hostModel.getUserInfo(result.idx);
     if (refreshToken !== user.refreshToken) {
       console.log('invalid refresh token');
       return TOKEN_INVALID;
