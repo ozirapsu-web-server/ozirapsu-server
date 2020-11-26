@@ -43,3 +43,16 @@ exports.putRefreshToken = async (idx, refreshToken) => {
     throw err;
   }
 };
+
+// idx로 호스트 정보 조회
+exports.getUserInfo = async (idx) => {
+  const columns =
+    'host_idx, host_email, host_name, host_profile, host_phone_number, host_authorized, host_ios_token, host_login_type, host_refresh_token';
+  const query = `SELECT ${columns} FROM ${table} WHERE host_idx=${idx};`;
+  try {
+    return await pool.queryParam(query);
+  } catch (err) {
+    console.log('saveUserInfo error: ', err.message);
+    throw err;
+  }
+};
