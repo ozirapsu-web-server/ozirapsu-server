@@ -4,6 +4,7 @@ const util = require('../modules/util');
 const story = require('../models/story');
 const support = require('../models/support');
 const moment = require('moment');
+const transferTime = require('../modules/transferTime');
 
 exports.postSupport = async(req, res) => {
     const story_idx = req.query.story_idx;
@@ -92,6 +93,13 @@ exports.getSupport = async(req, res) => {
         const supportComment = await support.getSupportComment(req);
         if(comments === undefined || supportComment === undefined)
             return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, responseMessage.DB_ERROR));
+
+        for (const element of comments) {
+            element.support_date = await transferTime.transferTime(element.support_date);
+        }
+        for (const element of supportComment) {
+            element.comment_date = await transferTime.transferTime(element.comment_date);
+        }
 
         return res.status(statusCode.OK)
             .send(util.success(
