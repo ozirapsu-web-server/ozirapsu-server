@@ -145,10 +145,6 @@ exports.getRecentStory = async (req, res) => {
     const storyResult = await storyModel.getRecentStory();
 
     for (const story of storyResult) {
-      // 사연 대표 이미지 조회
-      // let img = await storyModel.getStoryImages(story.idx);
-      // story.image = img[0].image_path;
-
       // 사연 태그 조회
       const tagInfo = await storyModel.getTags(story.idx);
       let tags = [];
