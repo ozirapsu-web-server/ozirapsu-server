@@ -11,7 +11,7 @@ router.get('/:idx', storyController.getStoryInfo);
 /**
  * 사연 이미지 조회
  */
-router.get('/:idx/image', storyController.getStoryImages);
+router.get('/info/:idx/image', storyController.getStoryImages);
 
 /**
  * 사연 등록

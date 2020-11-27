@@ -52,6 +52,12 @@ exports.getStoryImages = async (req, res) => {
   const idx = req.params.idx;
 
   try {
+    // story_idx에 해당하는 사연이 없는 경우
+    if (!((await storyModel.checkStoryIdx(idx))[0])) {
+      return res
+      .status(statusCode.BAD_REQUEST)
+      .send(util.fail(statusCode.BAD_REQUEST, responseMessage.GET_STORY_IMG_FAIL));
+    }
     const result = await storyModel.getStoryImages(idx);
     const storyImages = result.map((data) => data.image_path);
 
