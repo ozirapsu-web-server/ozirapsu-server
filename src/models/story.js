@@ -8,7 +8,7 @@ const tag_tb = 'STORY_TAG_TB';
  */
 exports.getStoryInfo = async (story_idx) => {
   const query = `SELECT 
-                story_idx as idx, story_title as title, story_summary as summary, story_content as content, story_link as link,
+                story_idx as idx, story_title as title, story_content as content, story_link as link,
                 story_target_amount as target_amount, story_current_amount as current_amount, ROUND(story_current_amount*100/story_target_amount, 0) as amount_rate, 
                 story_createdat as created_at, H.host_idx, host_name, host_profile, host_authorized 
                 FROM (SELECT * FROM ${story_tb} where story_idx=${story_idx}) as S join HOST_TB as H ON S.host_idx=H.host_idx;`;
@@ -75,13 +75,11 @@ exports.postStory = async (
   tagList,
   imgFiles
 ) => {
-  // summary 넣는지 확인하기
   const storyColumns =
-    'story_title, story_summary, story_target_amount, story_content, story_createdat, host_idx';
-  const insertStoryQuery = `INSERT INTO ${story_tb}(${storyColumns}) 
-                  VALUES("${title}", "===summary===", ${targetAmount}, "${contents}", "${createdAt}", ${hostIdx});`;
-  const insertTagQuery = `INSERT INTO ${tag_tb}(tag_content, story_idx) VALUES (?, ?)`;
+    'story_title, story_target_amount, story_content, story_createdat, host_idx';
 
+  const insertStoryQuery = `INSERT INTO ${story_tb}(${storyColumns}) VALUES("${title}", ${targetAmount}, "${contents}", "${createdAt}", ${hostIdx});`;
+  const insertTagQuery = `INSERT INTO ${tag_tb}(tag_content, story_idx) VALUES (?, ?)`;
   const insertImgQuery = `INSERT INTO ${img_tb}(image_path, image_original_name, story_idx) VALUES (?, ?, ?)`;
 
   return await pool
