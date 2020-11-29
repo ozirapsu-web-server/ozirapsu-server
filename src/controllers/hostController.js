@@ -92,3 +92,37 @@ exports.singIn = async (req, res) => {
       .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, err.message));
   }
 };
+
+/**
+ * 프로필 수정
+ */
+exports.editProfile = async (req, res) => {
+  const hostIdx = req.decoded.idx;
+  const { name, introduction } = req.body;
+
+  let image = '';
+  if (req.file) {
+    image = req.file.location;
+
+    // 입력받은 파일의 확장자가 png, jpg, jpeg가 아닌 경우
+    const type = req.file.mimetype.split('/')[1];
+    if (type !== 'jpeg' && type !== 'jpg' && type !== 'png') {
+      return res
+        .status(statusCode.BAD_REQUEST)
+        .send(
+          util.fail(statusCode.BAD_REQUEST, responseMessage.INVALID_FILE_ERROR)
+        );
+    }
+  }
+
+  try {
+    await hostModel.editProfile(hostIdx, name, image, introduction);
+    return res
+      .status(statusCode.OK)
+      .send(util.success(statusCode.OK, responseMessage.PATCH_PROFILE_SUCCESS));
+  } catch (error) {
+    return res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, err.message));
+  }
+};
