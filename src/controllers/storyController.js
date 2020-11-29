@@ -53,10 +53,12 @@ exports.getStoryImages = async (req, res) => {
 
   try {
     // story_idx에 해당하는 사연이 없는 경우
-    if (!((await storyModel.checkStoryIdx(idx))[0])) {
+    if (!(await storyModel.checkStoryIdx(idx))[0]) {
       return res
-      .status(statusCode.BAD_REQUEST)
-      .send(util.fail(statusCode.BAD_REQUEST, responseMessage.GET_STORY_IMG_FAIL));
+        .status(statusCode.BAD_REQUEST)
+        .send(
+          util.fail(statusCode.BAD_REQUEST, responseMessage.GET_STORY_IMG_FAIL)
+        );
     }
     const result = await storyModel.getStoryImages(idx);
     const storyImages = result.map((data) => data.image_path);
@@ -108,7 +110,6 @@ exports.postStory = async (req, res) => {
       );
   }
 
-  //---------사연 요약 확정되면 추가하기---------//
   const { targetAmount, title, contents, tagList } = req.body;
   const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
 
