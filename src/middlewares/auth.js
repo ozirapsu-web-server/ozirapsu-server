@@ -6,7 +6,7 @@ const TOKEN_EXPIRED = -3;
 const TOKEN_INVALID = -2;
 
 exports.checkToken = async (req, res, next) => {
-  let accessToken = req.headers.accessToken;
+  let accessToken = req.headers.jwt;
 
   // 토큰이 없는 경우
   if (!accessToken) {

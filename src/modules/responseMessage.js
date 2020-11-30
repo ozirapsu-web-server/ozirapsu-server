@@ -18,6 +18,7 @@ module.exports = {
   POST_SIGNUP_SUCCESS: '회원 가입 성공',
   POST_SIGNIN_SUCCESS: '로그인 성공',
   MISS_MATCH_PW: '비밀번호가 일치하지 않습니다',
+  PATCH_PROFILE_SUCCESS: '프로필 수정 성공',
 
   // 토큰
   EMPTY_TOKEN: '토큰 값이 없습니다.',

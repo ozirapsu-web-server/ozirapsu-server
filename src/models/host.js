@@ -56,3 +56,16 @@ exports.getUserInfo = async (idx) => {
     throw err;
   }
 };
+
+/**
+ * 프로필 수정
+ */
+exports.editProfile = async (idx, name, image, introduction) => {
+  const query = `UPDATE ${table} SET host_name='${name}', host_profile='${image}', host_introduction='${introduction}' WHERE host_idx=${idx};`;
+  try {
+    return await pool.queryParam(query);
+  } catch (err) {
+    console.log('editProfile error: ', err.message);
+    throw err;
+  }
+};
