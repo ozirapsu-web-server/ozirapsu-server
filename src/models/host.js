@@ -61,6 +61,20 @@ exports.getUserInfo = async (idx) => {
 };
 
 /**
+ * 본인 프로필 조회
+ */
+exports.getProfile = async (idx) => {
+  const query = `SELECT host_name AS name, host_profile AS image, host_authorized AS authorized, host_introduction AS introduction
+                FROM ${table} WHERE host_idx=${idx};`;
+  try {
+    return await pool.queryParam(query);
+  } catch (err) {
+    console.log('getProfile error: ', err.message);
+    throw err;
+  }
+};
+
+/**
  * 프로필 수정
  */
 exports.editProfile = async (idx, name, image, introduction) => {

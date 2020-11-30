@@ -18,6 +18,9 @@ router.patch(
   hostController.editProfile
 );
 
+// 프로필 조회
+router.get('/profile', auth.checkToken, hostController.getProfile);
+
 // 호스트별 사연 조회
 router.get('/story', auth.checkToken, hostController.getStoriesByHost);
 

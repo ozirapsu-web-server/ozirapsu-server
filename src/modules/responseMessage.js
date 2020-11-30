@@ -18,6 +18,7 @@ module.exports = {
   POST_SIGNUP_SUCCESS: '회원 가입 성공',
   POST_SIGNIN_SUCCESS: '로그인 성공',
   MISS_MATCH_PW: '비밀번호가 일치하지 않습니다',
+  GET_PROFILE_SUCCESS: '프로필 조회 성공',
   PATCH_PROFILE_SUCCESS: '프로필 수정 성공',
   GET_HOST_STORY: '호스트 스토리 리스트 조회 성공',
 
