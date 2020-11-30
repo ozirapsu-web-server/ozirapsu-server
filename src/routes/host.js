@@ -18,4 +18,7 @@ router.patch(
   hostController.editProfile
 );
 
+// 호스트별 사연 조회
+router.get('/story', auth.checkToken, hostController.getStoriesByHost);
+
 module.exports = router;
