@@ -135,7 +135,7 @@ exports.getStoriesByHost = async (req, res) => {
   try {
     const result = await hostModel.getStoryListByHost(hostIdx);
     return res.status(statusCode.OK).send(
-      util.success(statusCode.OK, responseMessage.GET_HOST_STORY, {
+      util.success(statusCode.OK, responseMessage.GET_HOST_STORY_SUCCESS, {
         count: result.length,
         stories: result,
       })
