@@ -126,3 +126,23 @@ exports.editProfile = async (req, res) => {
       .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, err.message));
   }
 };
+
+/**
+ * 본인(호스트)이 올린 사연 보기
+ */
+exports.getStoriesByHost = async (req, res) => {
+  const hostIdx = req.decoded.idx;
+  try {
+    const result = await hostModel.getStoryListByHost(hostIdx);
+    return res.status(statusCode.OK).send(
+      util.success(statusCode.OK, responseMessage.GET_HOST_STORY_SUCCESS, {
+        count: result.length,
+        stories: result,
+      })
+    );
+  } catch (error) {
+    return res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, err.message));
+  }
+};

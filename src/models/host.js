@@ -1,5 +1,8 @@
 const pool = require('../modules/pool');
 const table = 'HOST_TB';
+const story_tb = 'STORY_TB';
+const img_tb = 'STORY_IMAGE_TB';
+const support_tb = 'SUPPORT_TB';
 
 // 회원 정보 저장
 exports.saveUserInfo = async (
@@ -66,6 +69,27 @@ exports.editProfile = async (idx, name, image, introduction) => {
     return await pool.queryParam(query);
   } catch (err) {
     console.log('editProfile error: ', err.message);
+    throw err;
+  }
+};
+
+/**
+ * 호스트별 사연 조회
+ */
+exports.getStoryListByHost = async (idx) => {
+  const query = `SELECT idx, title, I.image_path as image, amount_rate, support_cnt
+                FROM (
+                  SELECT ST.story_idx as idx, story_title AS title, ROUND(story_current_amount*100/story_target_amount, 0) AS amount_rate, story_createdat, host_idx, count(support_idx) as support_cnt 
+                  FROM ${story_tb} as ST LEFT OUTER JOIN ${support_tb} AS SP ON ST.story_idx=SP.story_idx 
+                  GROUP BY ST.story_idx
+                  ) AS S JOIN ${img_tb} as I ON S.idx=I.story_idx
+                WHERE host_idx=${idx}
+                GROUP BY idx
+                ORDER BY story_createdat DESC;`;
+  try {
+    return await pool.queryParam(query);
+  } catch (err) {
+    console.log('getStoryListByHost error: ', err.message);
     throw err;
   }
 };
