@@ -10,6 +10,9 @@ router.post('/signup', hostController.signUp);
 // 로그인
 router.post('/signin', hostController.singIn);
 
+// 프로필 조회
+router.get('/profile', auth.checkToken, hostController.getProfile);
+
 // 프로필 수정
 router.patch(
   '/profile',

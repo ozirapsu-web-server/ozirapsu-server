@@ -94,6 +94,25 @@ exports.singIn = async (req, res) => {
 };
 
 /**
+ * 프로필 조회
+ */
+exports.getProfile = async (req, res) => {
+  const hostIdx = req.decoded.idx;
+  try {
+    const result = await hostModel.getProfile(hostIdx);
+    return res
+      .status(statusCode.OK)
+      .send(
+        util.success(statusCode.OK, responseMessage.GET_PROFILE_SUCCESS, result)
+      );
+  } catch (error) {
+    return res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, err.message));
+  }
+};
+
+/**
  * 프로필 수정
  */
 exports.editProfile = async (req, res) => {
