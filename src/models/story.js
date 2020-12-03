@@ -126,3 +126,22 @@ exports.getRecentStory = async () => {
     throw err;
   }
 };
+
+/**
+ * 주목할 만한 사연 조회
+ */
+exports.getHotStory = async () => {
+  // 웹 v0.3까지 주목할 만한 사연은 임의 큐레이션 => story_idx 45~48까지
+  const query = `SELECT S.story_idx AS idx, story_title AS title, ROUND(story_current_amount*100/story_target_amount, 0) AS amount_rate,
+                I.image_path AS image
+                FROM ${story_tb} AS S JOIN ${img_tb} AS I ON S.story_idx = I.story_idx 
+                WHERE S.story_idx BETWEEN 45 AND 48
+                GROUP BY S.story_idx;`;
+
+  try {
+    return await pool.queryParam(query);
+  } catch (err) {
+    console.log('getHotStory error: ', err.message);
+    throw err;
+  }
+};
