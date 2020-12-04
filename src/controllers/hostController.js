@@ -1,5 +1,6 @@
 const encrypt = require('../modules/cryto');
 const hostModel = require('../models/host');
+const authModel = require('../models/auth');
 const jwt = require('../modules/jwt');
 const util = require('../modules/util');
 const responseMessage = require('../modules/responseMessage');
@@ -76,7 +77,7 @@ exports.singIn = async (req, res) => {
 
     if (result[0].host_password === hashed) {
       const { accessToken, refreshToken } = await jwt.sign(result[0]);
-      await hostModel.putRefreshToken(result[0].host_idx, refreshToken);
+      await authModel.putRefreshToken(result[0].host_idx, refreshToken);
       return res
         .status(statusCode.OK)
         .set({ token: accessToken, refreshToken: refreshToken })

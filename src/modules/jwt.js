@@ -34,24 +34,17 @@ exports.verify = async (token) => {
   return decoded;
 };
 
-exports.refresh = async (refreshToken) => {
+exports.refresh = async (idx, refreshToken) => {
   try {
     const result = await jwt.verify(refreshToken, secretKey);
     if (result.idx === undefined) {
       return TOKEN_INVALID;
     }
-    const user = await hostModel.getUserInfo(result.idx);
-    if (refreshToken !== user.refreshToken) {
-      console.log('invalid refresh token');
-      return TOKEN_INVALID;
-    }
+
     const payload = {
-      idx: user.host_idx,
+      idx: idx,
     };
-    const dto = {
-      token: jwt.sign(payload, secretKey, options),
-    };
-    return dto;
+    return jwt.sign(payload, secretKey, options);
   } catch (err) {
     if (err.message === 'jwt expired') {
       console.log('expired token');
@@ -64,5 +57,30 @@ exports.refresh = async (refreshToken) => {
       console.log('invalid token');
       return TOKEN_INVALID;
     }
+  }
+};
+
+exports.getIdx = async (refreshToken) => {
+  try {
+    const decoded = jwt.decode(refreshToken, { complete: true });
+    const payload = decoded.payload;
+    return payload.idx;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+exports.checkExpiration = async (refreshToken) => {
+  const decoded = jwt.decode(refreshToken, { complete: true });
+  const payload = decoded.payload;
+
+  const sevenDays = 60 * 60 * 24 * 7;
+  const today = Math.floor(Date.now() / 1000);
+  if (payload.exp - today <= sevenDays) {
+    // 만료기간이 7일 이하로 남은 경우
+    return true;
+  } else {
+    // 만료기간이 7일 넘게 남은 경우
+    return false;
   }
 };
