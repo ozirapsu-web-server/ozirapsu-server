@@ -5,6 +5,7 @@ module.exports = {
   GET_STORY_IMG_FAIL: '존재하지 않는 STORY_IDX입니다.',
   POST_STORY_SUCCESS: '사연 등록 성공',
   GET_RECENT_STORY_SUCCESS: '최근 사연 조회 성공',
+  GET_HOT_STORY_SUCCESS: '주목할 만한 사연 조회 성공',
 
   // 응원
   POST_SUPPORT_SUCCESS: '응원 등록 성공',

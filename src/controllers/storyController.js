@@ -177,3 +177,36 @@ exports.getRecentStory = async (req, res) => {
       .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, err.message));
   }
 };
+
+/**
+ * 주목할 만한 사연 조회
+ */
+exports.getHotStory = async (req, res) => {
+  try {
+    const storyResult = await storyModel.getHotStory();
+
+    for (const story of storyResult) {
+      // 사연 태그 조회
+      const tagInfo = await storyModel.getTags(story.idx);
+      let tags = [];
+      tagInfo.map((tag, idx) => {
+        tags[idx] = tag.tag_content;
+      });
+      story.tags = tags;
+    }
+    return res
+      .status(statusCode.OK)
+      .send(
+        util.success(
+          statusCode.OK,
+          responseMessage.GET_HOT_STORY_SUCCESS,
+          storyResult
+        )
+      );
+  } catch (err) {
+    console.log(err.message);
+    return res
+      .status(statusCode.INTERNAL_SERVER_ERROR)
+      .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, err.message));
+  }
+};

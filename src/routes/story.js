@@ -23,4 +23,9 @@ router.post('/', upload.array('images', 10), storyController.postStory);
  */
 router.get('/recent', storyController.getRecentStory);
 
+/**
+ * 주목할 만한 사연 조회
+ */
+router.get('/hot', storyController.getHotStory);
+
 module.exports = router;
