@@ -117,7 +117,7 @@ exports.getRecentStory = async () => {
   const query = `SELECT S.story_idx AS idx, story_title AS title, ROUND(story_current_amount*100/story_target_amount, 0) AS amount_rate,
                 I.image_path AS image
                 FROM ${story_tb} AS S JOIN ${img_tb} AS I ON S.story_idx = I.story_idx 
-                GROUP BY S.story_idx ORDER BY story_createdat LIMIT 4;`;
+                GROUP BY S.story_idx ORDER BY story_createdat DESC LIMIT 4;`;
 
   try {
     return await pool.queryParam(query);
