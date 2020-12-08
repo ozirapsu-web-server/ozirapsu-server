@@ -14,3 +14,19 @@ exports.postNews = async(req, news_createdat) => {
         throw err;
     }
 }
+
+exports.getNews = async(req) => {
+    const query = ` SELECT host_idx, host_profile, host_name, news_createdat, news_content 
+                    FROM ${table} 
+                    JOIN STORY_TB USING(story_idx) 
+                    JOIN HOST_TB USING(host_idx) 
+                    WHERE story_idx = ${req.query.story_idx} 
+                    ORDER BY news_createdat DESC;`;
+    try {
+        const result = await pool.queryParam(query);
+        return result;
+    } catch (err) {
+        console.log('getNews error: ', err.message);
+        throw err;
+    }
+}
