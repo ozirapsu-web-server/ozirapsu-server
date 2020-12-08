@@ -32,6 +32,7 @@ module.exports = {
 
   // 새소식
   POST_NEWS_SUCCESS: '새소식 등록 성공',
+
   // 런칭
   GET_LAUNCH_VIDEO_SUCCESS: '런칭 비디오 가져오기 성공',
 
