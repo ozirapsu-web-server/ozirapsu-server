@@ -4,6 +4,7 @@ const support = require('./support');
 const story = require('./story');
 const host = require('./host');
 const auth = require('./auth');
+const news = require('./news');
 const launch = require('./launch');
 
 /* GET home page. */
@@ -15,6 +16,7 @@ router.use('/story', story);
 router.use('/support', support);
 router.use('/host', host);
 router.use('/auth', auth);
+router.use('/news', news);
 router.use('/launch', launch);
 
 module.exports = router;

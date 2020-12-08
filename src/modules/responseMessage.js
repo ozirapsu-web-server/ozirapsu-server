@@ -30,6 +30,9 @@ module.exports = {
   AUTH_SUCCESS: '인증에 성공했습니다.',
   ISSUE_SUCCESS: '새로운 토큰이 생성되었습니다.',
 
+  // 새소식
+  POST_NEWS_SUCCESS: '새소식 등록 성공',
+
   // 런칭
   GET_LAUNCH_VIDEO_SUCCESS: '런칭 비디오 가져오기 성공',
 
