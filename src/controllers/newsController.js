@@ -35,3 +35,35 @@ exports.postNews = async(req, res) => {
         throw err;
     }
 }
+
+exports.getNews = async(req, res) => {
+    const story_idx = req.query.story_idx;
+
+    try{
+        // story_idx 안줬을 때
+        if(story_idx === undefined || story_idx === null || story_idx == 0)
+            return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMessage.PARAMETER_ERROR));
+
+        // 해당하는 스토리가 존재하지 않을 때
+        const storyInfo = await story.getStoryInfo(story_idx);
+        if (!storyInfo[0])
+            return res.status(statusCode.NOT_FOUND).send(util.fail(statusCode.NOT_FOUND, responseMessage.NO_CONTENT));
+
+        const newsList = await news.getNews(req);
+        if(newsList === undefined)
+            return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, responseMessage.DB_ERROR));
+
+        for (const element of newsList) {
+            element.news_createdat = await transferTime.transferTime(element.news_createdat);
+        }
+
+        return res.status(statusCode.OK)
+            .send(util.success(
+                statusCode.OK,
+                responseMessage.GET_NEWS_SUCCESS,
+                newsList));
+    } catch(err){
+        return res.status(statusCode.INTERNAL_SERVER_ERROR).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, err.message));
+        throw err;
+    }
+}
