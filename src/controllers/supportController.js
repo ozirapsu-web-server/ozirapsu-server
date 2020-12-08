@@ -8,7 +8,7 @@ const transferTime = require('../modules/transferTime');
 
 exports.postSupport = async(req, res) => {
     const story_idx = req.query.story_idx;
-    const {support_nickname, support_amount , support_comment, support_phone_number} = req.body;
+    const {support_nickname, support_amount , support_comment, support_phone_number, support_email} = req.body;
 
     try{
         // story_idx 안줬을 때
