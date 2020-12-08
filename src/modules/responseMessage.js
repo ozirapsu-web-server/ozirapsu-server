@@ -32,6 +32,8 @@ module.exports = {
 
   // 새소식
   POST_NEWS_SUCCESS: '새소식 등록 성공',
+  // 런칭
+  GET_LAUNCH_VIDEO_SUCCESS: '런칭 비디오 가져오기 성공',
 
   NO_CONTENT: '데이터가 존재하지 않습니다.',
   PARAMETER_ERROR: '잘못된 파라미터 값',

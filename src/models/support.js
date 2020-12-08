@@ -3,8 +3,8 @@ const table = 'SUPPORT_TB';
 
 exports.postSupport = async(req, support_createdat) => {
     const query = `INSERT INTO ${table}
-                    (support_nickname, support_amount , support_comment, support_phone_number, support_createdat, story_idx) 
-                    VALUES("${req.body.support_nickname}", ${req.body.support_amount}, "${req.body.support_comment}", "${req.body.support_phone_number}", "${support_createdat}", ${req.query.story_idx});`;
+                    (support_nickname, support_amount , support_comment, support_phone_number, support_email, support_createdat, story_idx) 
+                    VALUES("${req.body.support_nickname}", ${req.body.support_amount}, "${req.body.support_comment}", "${req.body.support_phone_number}", "${req.body.support_email}", "${support_createdat}", ${req.query.story_idx});`;
 
     try {
         const result = await pool.queryParam(query);
