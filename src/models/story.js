@@ -82,10 +82,11 @@ exports.postStory = async (
   const insertTagQuery = `INSERT INTO ${tag_tb}(tag_content, story_idx) VALUES (?, ?)`;
   const insertImgQuery = `INSERT INTO ${img_tb}(image_path, image_original_name, story_idx) VALUES (?, ?, ?)`;
 
-  return await pool
+  let insertId;
+  await pool
     .Transaction(async (conn) => {
       // 1. STORY_TB에 사연 정보 삽입
-      let insertStoryResult = await conn.query(insertStoryQuery);
+      const insertStoryResult = await conn.query(insertStoryQuery);
 
       // 2. STORY_TAG_TB에 태그 삽입
       tagList.forEach(async (tag) => {
@@ -103,11 +104,14 @@ exports.postStory = async (
           ]);
         }
       });
+      insertId = insertStoryResult.insertId;
     })
     .catch((err) => {
       console.log('postStory error: ', err.message);
       throw err;
     });
+
+  return insertId;
 };
 
 /**
