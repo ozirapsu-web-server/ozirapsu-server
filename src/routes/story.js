@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const storyController = require('../controllers/storyController');
+const auth = require('../middlewares/auth');
 const upload = require('../modules/multer');
 
 /**
@@ -16,7 +17,12 @@ router.get('/info/:idx/image', storyController.getStoryImages);
 /**
  * 사연 등록
  */
-router.post('/', upload.array('images', 10), storyController.postStory);
+router.post(
+  '/',
+  auth.checkToken,
+  upload.array('images', 10),
+  storyController.postStory
+);
 
 /**
  * 최근 사연 조회

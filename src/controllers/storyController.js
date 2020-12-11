@@ -3,6 +3,7 @@ const statusCode = require('../modules/statusCode');
 const util = require('../modules/util');
 const storyModel = require('../models/story');
 const moment = require('moment');
+const STORY_URL = 'http://whowants.ga/storyPage/';
 
 /**
  * 사연 정보 조회
@@ -84,8 +85,7 @@ exports.getStoryImages = async (req, res) => {
  * 사연 등록
  */
 exports.postStory = async (req, res) => {
-  //---------로그인 구현 이후 header로 토큰 받아서 host_idx 받기---------//
-  const hostIdx = 1; // 임시 hostIdx
+  const hostIdx = req.decoded.idx;
 
   // 입력받은 파일이 단 한 장도 없는 경우
   if (req.files === undefined || req.files.length === 0) {
@@ -133,9 +133,17 @@ exports.postStory = async (req, res) => {
       req.files
     );
 
+    if (!result) {
+      return res
+        .status(statusCode.INTERNAL_SERVER_ERROR)
+        .send(util.fail(statusCode.INTERNAL_SERVER_ERROR, err.message));
+    }
+
     return res
       .status(statusCode.OK)
-      .send(util.success(statusCode.OK, responseMessage.POST_STORY_SUCCESS));
+      .send(util.success(statusCode.OK, responseMessage.POST_STORY_SUCCESS, {
+        storyURL : STORY_URL+result
+      }));
   } catch (err) {
     return res
       .status(statusCode.INTERNAL_SERVER_ERROR)
